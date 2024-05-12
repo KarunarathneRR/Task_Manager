@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Task Manager</string>
+    <string name="topic">Topic</string>
+    <string name="description">Description</string>
+    <string name="date">Date</string>
+    <string name="submit">Submit</string>
+    <string name="display">Display</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
 </resources>

@@ -18,55 +18,52 @@ class MyAdapter(
     var context: Context,
     modelArrayList: ArrayList<Model>,
     sqLiteDatabase: SQLiteDatabase
-) : RecyclerView.Adapter<ModelViewHolder>() {
+) : RecyclerView.Adapter<MyAdapter.ModelViewHolder>() {
     var modelArrayList: ArrayList<Model> = ArrayList()
     var sqLiteDatabase: SQLiteDatabase
 
-    //generate constructor
+    // Generate constructor
     init {
         this.modelArrayList = modelArrayList
         this.sqLiteDatabase = sqLiteDatabase
     }
 
-    @SuppressLint("InflateParams")
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ModelViewHolder {
         val inflater = LayoutInflater.from(context)
-        val view = inflater.inflate(R.layout.singledata, null)
+        val view = inflater.inflate(R.layout.singledata, parent, false) // Inflate layout with parent
         return ModelViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: ModelViewHolder, @SuppressLint("RecyclerView") position: Int) {
+    override fun onBindViewHolder(holder: ModelViewHolder, position: Int) {
         val model = modelArrayList[position]
         holder.txttopic.text = model.topic
         holder.txtdescription.text = model.description
         holder.txtdate.text = model.date
 
-        //click on button go to main activity
+        // Click listener for edit button
         holder.edit.setOnClickListener {
-            val bundle = Bundle()
-            bundle.putInt("id", model.id)
-            bundle.putString("topic", model.topic)
-            bundle.putString("description", model.description)
-            bundle.putString("date", model.date)
-            val intent = Intent(context, MainActivity::class.java)
-            intent.putExtra("userdata", bundle)
+            val bundle = Bundle().apply {
+                putInt("id", model.id)
+                putString("topic", model.topic)
+                putString("description", model.description)
+                putString("date", model.date)
+            }
+            val intent = Intent(context, MainActivity::class.java).apply {
+                putExtra("userdata", bundle)
+            }
             context.startActivity(intent)
         }
-        //delete row
-        holder.delete.setOnClickListener(object : View.OnClickListener {
-            var dBmain: DBmain = DBmain(context)
-            @SuppressLint("NotifyDataSetChanged")
-            override fun onClick(v: View) {
-                sqLiteDatabase = dBmain.readableDatabase
-                val delele =
-                    sqLiteDatabase.delete(DBmain.TABLENAME, "id=" + model.id, null).toLong()
-                if (delele != -1L) {
-                    Toast.makeText(context, "deleted data successfully", Toast.LENGTH_SHORT).show()
-                    modelArrayList.removeAt(position)
-                    notifyDataSetChanged()
-                }
+
+        // Click listener for delete button
+        holder.delete.setOnClickListener {
+            val dBmain = DBmain(context)
+            val delete = sqLiteDatabase.delete(DBmain.TABLENAME, "id=${model.id}", null)
+            if (delete != -1) {
+                Toast.makeText(context, "Deleted data successfully", Toast.LENGTH_SHORT).show()
+                modelArrayList.removeAt(position)
+                notifyDataSetChanged()
             }
-        })
+        }
     }
 
     override fun getItemCount(): Int {
