@@ -1,7 +1,9 @@
 package com.example.taskmanager
 
+import android.content.Intent
 import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -21,6 +23,10 @@ class DisplayData : AppCompatActivity() {
         findid()
         displayData()
         recyclerView?.layoutManager = LinearLayoutManager(this)
+
+        findViewById<Button>(R.id.add_button)?.setOnClickListener {
+            startActivity(Intent(this, MainActivity::class.java))
+        }
     }
 
     private fun displayData() {

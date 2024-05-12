@@ -7,4 +7,5 @@
     <string name="display">Display</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
+    <string name="add">+</string>
 </resources>
